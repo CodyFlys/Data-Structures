@@ -42,7 +42,7 @@ class LinkedList:
             self.tail = current
             current.set_next(new_Node)
 
-    def remove_head(self):
+    def remove_from_head(self):
         if not self.head:
             return None
         else:

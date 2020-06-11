@@ -1,3 +1,8 @@
+from stack import Stack
+# from queue import Queue
+from collections import deque
+from queue import Queue
+from stack import Stack
 """
 Binary search trees are a data structure that enforce an ordering over 
 the data they store. That ordering in turn makes it a lot more efficient 
@@ -9,9 +14,6 @@ This part of the project comprises two days:
 2. Implement the `in_order_print`, `bft_print`, and `dft_print` methods
    on the BSTNode class.
 """
-from queue import Queue
-from stack import Stack
-
 class BSTNode:
     def __init__(self, value):
         self.value = value
@@ -20,31 +22,17 @@ class BSTNode:
 
     # Insert the given value into the tree
     def insert(self, value):
-        # compare the value to the root's value to determine which direction
-        # we're gonna go in 
-        # if the value < root's value 
         if value < self.value:
-            # go left 
-            # how do we go left?
-            # we have to check if there is another node on the left side
-            if self.left: 
-                # then self.left is a Node 
-                # now what?
-                self.left.insert(value)
-            else:
-                # then we can park the value here
+            if self.left is None: 
                 self.left = BSTNode(value)
-        # else the value >= root's value 
-        else:
-            # go right
-            # how do we go right? 
-            # we have to check if there is another node on the right side 
-            if self.right:
-                # then self.right is a Node 
-                self.right.insert(value)
             else:
-                self.right = BSTNode(value)
-
+                self.left.insert(value)
+        elif value >= self.value:
+            if self.right is None:
+                self.right = BSTNode(value) 
+            else:
+                self.right.insert(value)
+                
     # Return True if the tree contains the value
     # False if it does not
     def contains(self, target):
@@ -73,29 +61,68 @@ class BSTNode:
         print(self.value)
         fn(self.value)
         if self.left:
-            print('left')
             self.left.for_each(fn)
         if self.right:
-            print('right')
             self.right.for_each(fn)
-        else:
-            return None
-            
+
     # Part 2 -----------------------
+
     # Print all the values in order from low to high
     # Hint:  Use a recursive, depth first traversal
-    def in_order_print(self, node):
-        pass
+    # def in_order_print(self, node):
+    #     # make sure left tree exists
+    #     if self.left:
+    #         # Use in_order_print to print in order
+    #         self.left.in_order_print(node)
+    #     else:
+    #         print(self.value)
+    #     # make sure right tree exists
+    #     if self.right:
+    #         # Use in_order_print to print in order
+    #         self.right.in_order_print(node)
+    #     else:
+    #         print(self.value)
 
-    def bft_print(self, node):
-        pass
+    def in_order_print(self, node):
+        if node is None:
+            return
+        if self.left:
+            self.left.in_order_print(self.left)
+        print(self.value)
+        if self.right:
+            self.right.in_order_print(self.right)
+
 
     # Print the value of every node, starting with the given node,
-    # in an iterative depth first traversal
-
-    def dft_print(self, node):
+    # in an iterative breadth first traversal
+    def bft_print(self, node):
         pass
+        queue = Queue()
+        queue.enqueue(node)
 
+        while len(queue) > 0:
+            next_node: BSTNode = queue.dequeue()
+            print(next_node.value)
+            if next_node.left:
+                queue.enqueue(next_node.left)
+            if next_node.right:
+                queue.enqueue(next_node.right)
+    # Print the value of every node, starting with the given node,
+    # in an iterative depth first traversal
+    def dft_print(self, node):
+        stack = Stack()
+        stack.push(node)
+
+        while len(stack) != 0:
+            curr = stack.pop()
+            print(curr.value)
+            if curr.left:
+                stack.push(curr.left)
+            if curr.right:
+                stack.push(curr.right)
+
+
+    
 
     # Stretch Goals -------------------------
     # Note: Research may be required
